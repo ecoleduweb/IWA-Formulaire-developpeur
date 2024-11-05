@@ -3,7 +3,7 @@ import '#style/Layout.scss';
 const TheFooter = () => {
   return (
     <footer>
-      <p>Belle liste!</p>
+      <p>Belle validation!</p>
     </footer>
   );
 };

@@ -3,7 +3,7 @@ import '#style/Layout.scss';
 function TheHeader() {
   return (
     <header className="border-bottom">
-      <h1>Todo list.</h1>
+      <h1>Super Formulaire.</h1>
     </header>
   );
 }

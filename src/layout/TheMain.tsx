@@ -1,58 +1,71 @@
-import { useEffect, useState } from 'react';
-import Todo from '#types/Todo';
-import ATodo from '#components/ATodo';
-import TheAddTodo from '#components/TheAddTodo';
-import useTodo from '../composables/useTodoService';
+import '#style/Form.scss';
+import Developper from '#types/Developper';
+import { useForm } from 'react-hook-form';
+
 const TheMain = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const { deleteTodo, getTodos, patchTodo, postTodo } = useTodo();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Developper>({
+    defaultValues: async (): Promise<Developper> => {
+      const res = await fetch('https://iwa-api-developper-3c80b3b34c5c.herokuapp.com/developper');
+      const data = await res.json();
+      return data;
+    },
+  });
 
-  useEffect(() => {
-    getTodos(setTodos);
-  }, []);
-
-  const handleAddTodo = async (todo: Todo) => {
-    const newTodo = await postTodo(todo);
-    if (newTodo) {
-      setTodos([...todos, newTodo]);
-    }
-  };
-
-  const handleCompleteTodo = (id: string) => {
-    setTodos(
-      todos.map((todo) => {
-        if (todo.id === id) {
-          const updatedTodo = { ...todo, isCompleted: !todo.isCompleted };
-          patchTodo(updatedTodo);
-          return updatedTodo;
-        }
-        return todo;
-      })
-    );
-  };
-
-  const handleDeleteTodo = (id: string) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
-    deleteTodo(id);
+  const onSubmit = async (data: Developper) => {
+    await fetch('https://iwa-api-developper-3c80b3b34c5c.herokuapp.com/developper', {
+      body: JSON.stringify(data),
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    });
   };
 
   return (
     <main className="wrapper">
-      <h1>Ta liste de choses à faire</h1>
-      <TheAddTodo onAddTodo={handleAddTodo} />
-      <div className="todo-list">
-        {todos.map((todo) => (
-          <ATodo
-            key={todo.id}
-            todo={todo}
-            onComplete={handleCompleteTodo}
-            onDelete={handleDeleteTodo}
+      <h1>Ton formulaire</h1>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <label htmlFor="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            {...register('name', { required: 'Le nom est requis' })}
           />
-        ))}
-      </div>
+          {errors.name && <span>{errors.name.message}</span>}
+        </div>
+        <div>
+          <label htmlFor="age">Age</label>
+          <input
+            type="number"
+            id="age"
+            {...register('age', { required: true })}
+          />
+          {errors.age && <span>This field is required</span>}
+        </div>
+        <div>
+          <label htmlFor="isAProWithReact">Are you a pro with React?</label>
+          <input
+            type="checkbox"
+            id="isAProWithReact"
+          />
+          {errors.isAProWithReact && <span>This field is required</span>}
+        </div>
+        <div>
+          <label htmlFor="salary">Salary</label>
+          <input
+            type="number"
+            id="salary"
+            {...register('salary', { required: true })}
+          />
+          {errors.salary && <span>This field is required</span>}
+        </div>
+        <button type="submit">Submit</button>
+      </form>
     </main>
   );
 };
 
 export default TheMain;
-

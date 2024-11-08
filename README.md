@@ -1,16 +1,17 @@
-# Projet TODO
+# Validation formulaire
 
-Objectif : Faire fonctionner un site web de TODOS avec différentes intégrations de persistences
+Objectif : Valider les formulaires à l'aide de react use form et relier le formulaire à un l'API.
 
 ## Quoi faire?
 
-À partir des composantes fournies, fait fonctionner la logique des todos dans le fichier TheMain afin de rendre le site web opérationnel.
+1. Modifie le formulaire pour qu'il soit entièrement intégré à react-use-form.
+2. Valide le formulaire avec le test playwright
+3. complète le test playwright sur le salaire
 
 ## Ensuite?
 
-Utilise le useLocalStorage dans le dossier composable pour ajouter les todos dans le localstorage.
-Ensuite, va lire le code et comprends ce qu'il fait (chat gpt?)
+Tente d'envoyer le formulaire rempli sur l'API.
+Tu dois t'aider du fichier swagger fourni par l'API disponible [ici](https://iwa-api-developper-3c80b3b34c5c.herokuapp.com/swagger/)
+Répond à cette question : C'est le même api pour tout le monde... la même route pour tout le monde... alors pourquoi les valeurs du formulaire sont différentes pour chacun?
+... Comment est-ce que l'API me reconnaît?
 
-## Ensuite?
-
-On branche ça sur un api!

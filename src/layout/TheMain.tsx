@@ -1,14 +1,16 @@
 import '#style/Form.scss';
 import Developper from '#types/Developper';
 import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
 
 const TheMain = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset
   } = useForm<Developper>(
-    {}
+    // Si jamais tu veux faire du code beaucoup plus propre
     //   {
     //   defaultValues: async (): Promise<Developper> => {
     //     const res = await fetch('https://iwa-api-developper-3c80b3b34c5c.herokuapp.com/developper');
@@ -18,13 +20,36 @@ const TheMain = () => {
     // }
   );
 
+
+
+
+  //1 . déclare ta fonction async qui va chercher les données
+  const fetchData = async () => {
+    try {
+      const res = await fetch('https://iwa-api-developper-3c80b3b34c5c.herokuapp.com/developper');
+      const data = await res.json();
+      reset(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(() => {
+    // 2. appelle ta fonction
+    fetchData();
+  }, []);
+
+
+  // ici, bonne nouvelle, on peut mettre async à notre fonction onSubmit. Tu peux donc coder directement des await à l'intérieur.
   const onSubmit = async (data: Developper) => {
-    console.log(data);
-    // await fetch('https://iwa-api-developper-3c80b3b34c5c.herokuapp.com/developper', {
-    //   body: JSON.stringify(data),
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    // });
+    await fetch('https://iwa-api-developper-3c80b3b34c5c.herokuapp.com/developper', {
+      // transforme ton data JSON en string
+      body: JSON.stringify(data),
+      // utilise la méthode POST pour envoyer des données
+      method: 'POST',
+      // signale que le contenu est du JSON à l'API
+      headers: { 'Content-Type': 'application/json' },
+    });
   };
 
   return (
@@ -58,6 +83,7 @@ const TheMain = () => {
           <input
             type="checkbox"
             id="isAProWithReact"
+            {...register('isAProWithReact')}
           />
         </div>
         <div>
